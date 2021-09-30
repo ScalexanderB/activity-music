@@ -14,28 +14,37 @@
     <!-- Header + Navigation bar -->
     <header>
         <div class="logo">
-            <img src ="img/icon.jpg" alt="BPM logo">
+            <img src ="img/iconfinder-icon.svg" alt="BPM logo">
         </div>
         <h1>Train to the beat!</h1>
     </header>
+    
 
     <!-- Initial form for choosing parameters -->
     <main>
-        <div class="parameter-form">
-            <h2>Select your preferences:</h2>
-            <p>Choose from the listed options to generate a training playlist!</p>
-            <form>
-                <label for="BPM">Enter your desired beats per minute, they must range from 40 to 220</label>
-                <input class="form-input" type="number" placeholder="Beats per minute" maxlength="3">
-                <label for="genres">Select a genre</label>
-                <select name="genres" id="genres" class="form-input">
-                    <option value="Rock">Rock</option>
-                    <option value="Hip-hop">Hip-hop</option>
-                    <option value="Classical">Classical</option>
-                </select>    
-                <button class="searchBtn" type="submit" data-inline="true" >Search</button>
-            </form>
-        </div>
+        <section class="hero-container">
+            <div class="cta">
+                <h2>Lorem ipsum dolor.</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, quaerat! Optio aliquid nulla odio? Laudantium amet, fugiat, earum saepe repudiandae corrupti voluptate incidunt similique adipisci blanditiis voluptas facilis! Quis, pariatur.
+                </p>
+            </div>    
+                <div class="parameter-form">
+                    <h3>Select your preferences:</h3>
+                    <p>Choose from the listed options to generate a training playlist!</p>
+                    <form>
+                        <label for="BPM">Enter your desired beats per minute, they must range from 40 to 220</label>
+                        <input class="form-input" type="number" placeholder="Beats per minute" maxlength="3">
+                        <label for="genres">Select a genre</label>
+                        <select name="genres" id="genres" class="form-input">
+                            <option value="Rock">Rock</option>
+                            <option value="Hip-hop">Hip-hop</option>
+                            <option value="Classical">Classical</option>
+                        </select>    
+                        <button class="searchBtn" type="submit" data-inline="true" >Search</button>
+                    </form>
+                </div>
+        </section>
         
         <!-- Placeholder for list of songs generated to drag or play from -->
             <ul>

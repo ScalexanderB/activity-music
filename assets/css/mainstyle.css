@@ -29,14 +29,19 @@
       width: 75px;
       height: 75px;
   }
-  
- .hero-container img {
-     width: 100%;
-     display: flex;
-     flex-wrap: wrap;
-     height: 800px;
-     -webkit-transform: scaleX(-1);
-     transform: scaleX(-1);   
+
+ .hero-container {
+    background-image: url("../../img/Fitness_Roads_Run_502738_3840x2400.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    background-attachment: fixed;
+    background-position: 100%; 
+    width: 100vw;
+    height: 100vh;
  }
 
  header {
@@ -46,7 +51,15 @@
     justify-content: left;
     flex-wrap: wrap;
     top: 0;
-    border-bottom: 2px solid var(--tertiary);
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-image: url("../../img/Fitness_Roads_Run_502738_3840x2400.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-position: 80%;
+    z-index: 9999;
  }
 
  header h1 {
@@ -56,19 +69,41 @@
     font-size: 40px;
     font-weight: 700;
     margin: 0;
-    color: var(--dark);
+    color: var(--primary);
     line-height: 1.25;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    background-color: rgba(56, 48, 46, 0.3);
+    border-radius: 15px;
+    width: 330px;
  }
-
- main {
-    margin: 20px auto;
-    width: 94%;
-  }
   
   p {
     font-size: 1.2rem;
   }
   
+.cta {
+    width: 35%;
+    text-align: right;
+    margin: 3.5%;
+    color: var(--primary);
+    font-size: 18px;
+    line-height: 1.2;
+    background-color: rgba(56, 48, 46, 0.3);
+    border-radius: 15px;
+    height: 200px;
+    width: 600px;
+    padding-right: 20px;
+}
+
+.cta h2 {
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    font-size: 55px;
+    color: var(--primary);
+}
+
+.cta p {
+    padding-top: 20px;
+}
 
 .parameter-form {
     display: flex;
@@ -83,7 +118,7 @@
     border-radius: 15px;
 }
 
-.parameter-form h2 {
+.parameter-form h3 {
     font-size: 24px;
     margin: 0;
 }
