@@ -221,7 +221,7 @@ var APIController = (function() {
 
 //get results from local storage. use info to make fetch request to spotify
 function fetchResults() {
-  //localStorage.getItem(localnum); 
+  localStorage.getItem(localnum); 
 
   //e.preventDefault;
   var songTitle = 'The Miracle';//songDetailList[n][1];
