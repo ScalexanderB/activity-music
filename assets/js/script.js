@@ -179,14 +179,14 @@ clickAdd();
 var APIController = (function() {
 
   var clientId = '7ad5178152f4438794784f504779b811'; 
-  var clientSecret = 'cff42ff02d08407cb726bcff4f4c146f'; 
+  var clientSecret = ''; 
 
   var _getToken = async () => {
     var result = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/x-www-form-urlencoded',
-        'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret)
+        'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret) //btoa is deprecated?? find another solution to encode string in base 64
       },
       body: 'grant_type=client_credentials'
     });
