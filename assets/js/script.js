@@ -82,12 +82,12 @@ function clickGenere(){
 // for music API developer: 
 //num = range of localStorage.length;
 // var test= localStorage.getitem(num)-> var temp= test.split(',');->songtitle = temp[0]; -> songArtist = temp[1];
-var localnum = localStorage.length;
+
 
 function clickAdd(){
 $('#musicList').on('click','.addbutton',function(e){
   var songuli = e.target.id;
-  
+  var localnum = localStorage.length;
   //console.log(songuli);
   //console.log(songDetailList.length);
   //console.log(songDetailList[0][1]);
@@ -175,11 +175,11 @@ clickAdd();
 
 
 
-
-var APIController = (function() {
+//function to get oauth token from spotify
+var APIController = function() {
 
   var clientId = '7ad5178152f4438794784f504779b811'; 
-  var clientSecret = ''; 
+  var clientSecret = 'cff42ff02d08407cb726bcff4f4c146f'; 
 
   var _getToken = async () => {
     var result = await fetch('https://accounts.spotify.com/api/token', {
@@ -193,9 +193,11 @@ var APIController = (function() {
     
     var data = await result.json();
     return data.access_token;
+    
+    
   }
-
-  var _getTrack = async (token, trackEndPoint) => {
+  
+  /*var _getTrack = async (token, trackEndPoint) => {
 
     var result = await fetch(`${trackEndPoint}`, {
       method: 'GET',
@@ -204,30 +206,46 @@ var APIController = (function() {
 
     var data = await result.json();
     return data;
-  }
+  }*/
 
   return {
     getToken() {
       return _getToken();
     },
-    getTrack(token, trackEndPoint) {
+    /*getTrack(token, trackEndPoint) {
       return _getTrack(token, trackEndPoint);
-    }
+    }*/
   }
 
-})();
-  
+};
+
+//range function to get keys from local storage
+function range(start, end) {
+  var ans = [];
+  for (let i = start; i <= end; i++) {
+      ans.push(i);
+  }
+  return ans;
+}
+
+var num = range(0,localStorage.length);
+console.log(num);
+var n;
 
 
 //get results from local storage. use info to make fetch request to spotify
 function fetchResults() {
-  localStorage.getItem(localnum); 
+  var tracks = localStorage.getItem(num); 
+  console.log(tracks);
 
   //e.preventDefault;
-  var songTitle = 'The Miracle';//songDetailList[n][1];
-  var artist = 'Queen'//songDetailList[n][2];
- 
+  var songTitle = 'The Miracle';//songDetailList[n][1];//
+  var artist = 'Queen';//songDetailList[n][2];//
+  // console.log(songTitle);
+  // console.log(artist);
   
+  APIController();
+  //how to add token to this fetch call
   url = "https://api.spotify.com/v1/search?q=track:" + songTitle + "%20artist:" + artist + "";
 
   fetch(url) 
@@ -238,7 +256,7 @@ function fetchResults() {
       console.log(data);
     })
     .catch(function(error) {
-      console.log('Error. File not found.');
+      console.log('Error.');
     });
 };
 
