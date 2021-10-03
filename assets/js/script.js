@@ -1,26 +1,118 @@
-var genereListToatal =[];
 
+
+var genereList =[];
+var songDetailList =[];
+
+/**display all the songs from the API */
 function songListDisplay(songtitle,songuri,songartist){
-  //for css, list class: songlist id:musicList
-  console.log("works!: ");
+  //for css, list class: songlist div id:musicList, each song id: song title;
+  //button for each song to add to the localstorage, button id: each songuri, buttonclass: addbutton;
+  //console.log("works!: ");
   var musicsection = document.getElementById("musicList");
   var musicitem = document.createElement("a");
   musicitem.innerHTML = "Title:  "+songtitle+"   Artist:  "+songartist;
   var br = document.createElement("br");
-  console.log("songtotle: "+songtitle);
+  //create button
+  var addbutton = document.createElement("button");
+  addbutton.innerHTML="Add +"
+  addbutton.setAttribute('id',songuri);
+  addbutton.setAttribute('class','addbutton');
+ // console.log("songtotle: "+songtitle);
   musicsection.appendChild(musicitem);
+  musicsection.appendChild(addbutton);
   musicsection.appendChild(br);
   musicitem.setAttribute("id",songtitle);
   musicitem.setAttribute("class","songlist");
   //for develop purpose, should be deleted 
   musicitem.setAttribute("href",songuri);
+}
+/**display all the genre based on BPM and first 250 */
+function songGenreDisplay(genereListToatal){
+  //for css, genrelist class: genereoption, genrelist div id: genreList, element for each <button>, Button id : shown as html name
+  for(var j =0; j<genereListToatal.length;j++){
+    var genresection = document.getElementById("genreList");
+    var genereitem = document.createElement("button");
+    genereitem.innerHTML = genereListToatal[j];
+    genresection.appendChild(genereitem);
+   genereitem.setAttribute("name",genereitem);
+    genereitem.setAttribute("id",genereitem);
+    genereitem.setAttribute("class","genereoption");
+  }
+}
+/**remove all display while refresh the search */
+function removeall(){
+  var musicsection = document.getElementById("musicList");
+  musicsection.innerHTML='';
+  var genresection = document.getElementById("genreList");
+  genresection.innerHTML='';
+}
+/**for genere list to be clickable && change based on genere*/
+function clickGenere(){
+  $('#genreList').on('click', '.genereoption', function(e) {
+    var generename = e.target.innerHTML;
+    var genereSongList=[];
+  //  var testnum =0;
+    //console.log(generename);
+    for(var q=0; q<songDetailList.length;q++){
+      currentgenere=[];
+      currentgenere.push(songDetailList[q][0]);
+    //  / console.log(currentgenere.length);
+      for(var r=0; r<currentgenere.length;r++){
+      if(currentgenere[0]!=null&&currentgenere[0][r]==generename){
+    //    testnum++;
+        //console.log("G: "+currentgenere[r]);
+       // console.log("title: "+songDetailList[q][1]);
+        //console.log(songDetailList[q][0]);
+        genereSongList.push(songDetailList[q]);
+      } 
+    }
+  }
+    //console.log("num: "+testnum);
+      removeall();
+    for(var p=0; p<genereSongList.length;p++){
+       //0. genres,1. songtitle,2. songartist,3. songuri
+      songListDisplay(genereSongList[p][1],genereSongList[p][3],genereSongList[p][2]);
+    } 
+})
 
+}
+/**list add to local based on addbutton+
+ * functionally complete, please let me know what info do you need from here to display music from other API
+*/
+// for music API developer: 
+//num = range of localStorage.length;
+// var test= localStorage.getitem(num)-> var temp= test.split(',');->songtitle = temp[0]; -> songArtist = temp[1];
+var localnum = localStorage.length;
+
+function clickAdd(){
+$('#musicList').on('click','.addbutton',function(e){
+  var songuli = e.target.id;
+  
+  //console.log(songuli);
+  //console.log(songDetailList.length);
+  //console.log(songDetailList[0][1]);
+  //console.log(songDetailList[0][2]);
+  //localStorage.clear();// for develop purpose
+ for(var n=0; n<songDetailList.length;n++){
+   if(songDetailList[n][3]==songuli){
+     var temp=[];
+     temp.push("default");
+     temp.push(songDetailList[n][1]);//songTitle
+     temp.push(songDetailList[n][2]);//songArtist
+     localStorage.setItem(localnum,temp);
+   }
+ }
+ // localStorage.setItem('default',songuli);
+
+})
 }
 
 
-$(".searchBtn").on("click", function(event) {
 
+
+$(".searchBtn").on("click", function(event) {
 var bpmvalue = $(".search").val(); 
+removeall();
 // limit the bpm range from 40 to 220
 if(bpmvalue >40 &&bpmvalue <220){
 
@@ -34,34 +126,38 @@ console.log(data);
  * tempo -> get songid -> same songid from artist -> from artist object get genres */
 var bpmListLength = data['tempo'].length;
 for(var i=0;i<bpmListLength;i++){
-    var genereList = data['tempo'][i]['artist']['genres'];
+    var genere = data['tempo'][i]['artist']['genres'];
     var songimg = data['tempo'][i]['album']['img'];
     var songuri = data['tempo'][i]['song_uri'];
     var songid = data['tempo'][i]['song_id'];
     var songtitle = data['tempo'][i]['song_title'];
     var songartist = data['tempo'][i]['artist']['name'];
  // console.log(generaList.length);
+    var singleDetail =[];
+    //0. genres,1. songtitle,2. songartist,3. songuri
+    singleDetail.push(genere);
+    singleDetail.push(songtitle);
+    singleDetail.push(songartist);
+    singleDetail.push(songuri);
+    //total songlist
+    songDetailList.push(singleDetail);
+
  
  //song list display
   songListDisplay(songtitle,songuri,songartist);
 
-  var diff = $(genereList).not(genereListToatal).get();
+  var diff = $(genere).not(genereList).get();
   //console.log("diff: "+diff);
   for(var k =0; k<diff.length;k++){
-    genereListToatal.push(diff[k]);
+    genereList.push(diff[k]);
   }
 }
-console.log("totalList:"+genereListToatal);
+//console.log("totalList:"+genereListToatal);
 // put the list
-for(var j =0; j<genereListToatal.length;j++){
-  var genresection = document.getElementById("genreList");
-  var genereitem = document.createElement("button");
-  genereitem.innerHTML = genereListToatal[j];
-  genresection.appendChild(genereitem);
-  genereitem.setAttribute("id",genereitem);
-  genereitem.setAttribute("class","genereoption");
-}
-
+songGenreDisplay(genereList);
+//console.log("total: "+songDetailList.length);
+//console.log("details_test1: "+songDetailList[0]);
+//console.log("details_test2: "+songDetailList[0][1]);
 })
 
 .catch(error => "error");
@@ -73,6 +169,84 @@ else{
 //&tempo='+bmpvalue+'bpm'
 //https://api.getsongbpm.com/search/?api_key=YOUR_API_KEY_HERE&type=artist&lookup=green+day"
 // &f3c958b0703b54d22b8335f49728191a
+
+clickGenere();
+clickAdd();
+
+
+
+
+var APIController = (function() {
+
+  var clientId = '7ad5178152f4438794784f504779b811'; 
+  var clientSecret = 'cff42ff02d08407cb726bcff4f4c146f'; 
+
+  var _getToken = async () => {
+    var result = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret)
+      },
+      body: 'grant_type=client_credentials'
+    });
+    
+    var data = await result.json();
+    return data.access_token;
+  }
+
+  var _getTrack = async (token, trackEndPoint) => {
+
+    var result = await fetch(`${trackEndPoint}`, {
+      method: 'GET',
+      headers: {'Authorization' : Bearer + token}
+    });
+
+    var data = await result.json();
+    return data;
+  }
+
+  return {
+    getToken() {
+      return _getToken();
+    },
+    getTrack(token, trackEndPoint) {
+      return _getTrack(token, trackEndPoint);
+    }
+  }
+
+})();
+  
+
+
+//get results from local storage. use info to make fetch request to spotify
+function fetchResults() {
+  //localStorage.getItem(localnum); 
+
+  //e.preventDefault;
+  var songTitle = 'The Miracle';//songDetailList[n][1];
+  var artist = 'Queen'//songDetailList[n][2];
+ 
+  
+  url = "https://api.spotify.com/v1/search?q=track:" + songTitle + "%20artist:" + artist + "";
+
+  fetch(url) 
+    .then(function(result) {
+      return result.json();
+    })
+    .then(function(data) {
+      console.log(data);
+    })
+    .catch(function(error) {
+      console.log('Error. File not found.');
+    });
+};
+
+fetchResults();
+
+
+
+
 
 
 
