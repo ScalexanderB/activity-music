@@ -175,49 +175,49 @@ clickAdd();
 
 
 
-//function to get oauth token from spotify
-var APIController = function() {
+// //function to get oauth token from spotify
+// var APIController = function() {
 
-  var clientId = '7ad5178152f4438794784f504779b811'; 
-  var clientSecret = 'cff42ff02d08407cb726bcff4f4c146f'; 
+//   var clientId = '7ad5178152f4438794784f504779b811'; 
+//   var clientSecret = 'cff42ff02d08407cb726bcff4f4c146f'; 
 
-  var _getToken = async () => {
-    var result = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/x-www-form-urlencoded',
-        'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret) //btoa is deprecated?? find another solution to encode string in base 64
-      },
-      body: 'grant_type=client_credentials'
-    });
+//   var _getToken = async () => {
+//     var result = await fetch('https://accounts.spotify.com/api/token', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type' : 'application/x-www-form-urlencoded',
+//         'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret) //btoa is deprecated?? find another solution to encode string in base 64
+//       },
+//       body: 'grant_type=client_credentials'
+//     });
     
-    var data = await result.json();
-    return data.access_token;
+//     var data = await result.json();
+//     return data.access_token;
     
     
-  }
+//   }
   
-  /*var _getTrack = async (token, trackEndPoint) => {
+//   /*var _getTrack = async (token, trackEndPoint) => {
 
-    var result = await fetch(`${trackEndPoint}`, {
-      method: 'GET',
-      headers: {'Authorization' : Bearer + token}
-    });
+//     var result = await fetch(`${trackEndPoint}`, {
+//       method: 'GET',
+//       headers: {'Authorization' : Bearer + token}
+//     });
 
-    var data = await result.json();
-    return data;
-  }*/
+//     var data = await result.json();
+//     return data;
+//   }*/
 
-  return {
-    getToken() {
-      return _getToken();
-    },
-    /*getTrack(token, trackEndPoint) {
-      return _getTrack(token, trackEndPoint);
-    }*/
-  }
+//   return {
+//     getToken() {
+//       return _getToken();
+//     },
+//     /*getTrack(token, trackEndPoint) {
+//       return _getTrack(token, trackEndPoint);
+//     }*/
+//   }
 
-};
+// };
 
 //range function to get keys from local storage
 function range(start, end) {
@@ -235,8 +235,8 @@ var n;
 
 //get results from local storage. use info to make fetch request to spotify
 function fetchResults() {
-  var tracks = localStorage.getItem(num); 
-  console.log(tracks);
+  //var tracks = localStorage.getItem(num); 
+  //console.log(tracks);
 
   //e.preventDefault;
   var songTitle = 'The Miracle';//songDetailList[n][1];//
@@ -244,23 +244,47 @@ function fetchResults() {
   // console.log(songTitle);
   // console.log(artist);
   
-  APIController();
+  
   //how to add token to this fetch call
-  url = "https://api.spotify.com/v1/search?q=track:" + songTitle + "%20artist:" + artist + "";
+  // url = "" + songTitle + "%20artist:" + artist + "";
 
-  fetch(url) 
-    .then(function(result) {
-      return result.json();
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyClVeOsym11FM7CD4gUK5g5C12vh8_NAn0");
+    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute() {
+    return gapi.client.youtube.search.list({
+      "part": [
+        "snippet"
+      ],
+      "maxResults": 25,
+      "q": "artist:" + artist + "&track:" + songTitle
     })
-    .then(function(data) {
-      console.log(data);
-    })
-    .catch(function(error) {
-      console.log('Error.');
-    });
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+//   fetch(url) 
+//     .then(function(result) {
+//       return result.json();
+//     })
+//     .then(function(data) {
+//       console.log(data);
+//     })
+//     .catch(function(error) {
+//       console.log('Error.');
+//     });
+ loadClient();
+execute();
 };
 
 fetchResults();
+
 
 
 
